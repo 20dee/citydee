@@ -1,0 +1,91 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>NovaFX — Trading Desk</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=IBM+Plex+Mono:wght@500;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+  <aside class="sidebar">
+    <a class="brand" href="#" aria-label="NovaFX home"><span class="brand-mark"><i></i><i></i></span><span>NOVA<span>FX</span></span></a>
+    <nav>
+      <a class="nav-item active" href="#"><span class="nav-icon">▦</span><span>Trade</span></a>
+      <a class="nav-item" href="#"><span class="nav-icon">⌁</span><span>Markets</span></a>
+      <a class="nav-item" href="#"><span class="nav-icon">◫</span><span>Positions</span></a>
+      <a class="nav-item" href="#"><span class="nav-icon">≡</span><span>History</span></a>
+    </nav>
+    <div class="sidebar-bottom">
+      <button class="nav-item" id="themeButton"><span class="nav-icon">◐</span><span>Theme</span></button>
+      <div class="profile"><div class="avatar">JD</div><div><strong>James D.</strong><small>Pro account</small></div><button>•••</button></div>
+    </div>
+  </aside>
+
+  <main>
+    <header>
+      <div class="market-status"><span class="live-dot"></span><strong>Market open</strong><small>Closes in 04:32:18</small></div>
+      <div class="header-actions">
+        <button class="icon-btn" aria-label="Search">⌕</button>
+        <button class="icon-btn notification" aria-label="Notifications">♧<b></b></button>
+        <button class="deposit">Deposit <span>＋</span></button>
+      </div>
+    </header>
+
+    <section class="workspace">
+      <div class="left-column">
+        <div class="instrument-bar">
+          <div class="pair">
+            <div class="flags"><span>🇪🇺</span><span>🇺🇸</span></div>
+            <div><h1>EUR / USD</h1><small>Euro / US Dollar</small></div>
+          </div>
+          <div class="quote"><strong id="mainPrice">1.08432</strong><span class="up" id="mainChange">+0.00042 · +0.04%</span></div>
+          <div class="instrument-stats"><div><span>Bid</span><strong id="bid">1.08429</strong></div><div><span>Ask</span><strong id="ask">1.08435</strong></div><div><span>Spread</span><strong>0.6</strong></div></div>
+        </div>
+
+        <div class="chart-card">
+          <div class="chart-toolbar">
+            <div class="timeframes"><button>1m</button><button class="active">5m</button><button>15m</button><button>1h</button><button>4h</button><button>D</button></div>
+            <div class="chart-tools"><button>⌇ Indicators</button><button class="icon-tool">⌗</button><button class="icon-tool">⛶</button></div>
+          </div>
+          <div class="chart-wrap">
+            <canvas id="chart" aria-label="EUR USD candlestick chart"></canvas>
+            <div class="ohlc"><span>O <b>1.08391</b></span><span>H <b>1.08512</b></span><span>L <b>1.08374</b></span><span>C <b id="ohlcClose">1.08432</b></span></div>
+          </div>
+        </div>
+
+        <div class="positions-card">
+          <div class="positions-tabs"><button class="active">Open positions <span>2</span></button><button>Pending orders <span>1</span></button></div>
+          <div class="positions-table">
+            <div class="table-head"><span>Instrument</span><span>Side</span><span>Size</span><span>Entry</span><span>Market</span><span>P&L</span><span></span></div>
+            <div class="position-row"><span><b>EUR/USD</b><small>Buy market</small></span><span class="side-buy">Long</span><span>0.50</span><span>1.08324</span><span>1.08432</span><span class="profit">+$54.00</span><button class="close-position">Close</button></div>
+            <div class="position-row"><span><b>GBP/JPY</b><small>Sell market</small></span><span class="side-sell">Short</span><span>0.25</span><span>191.842</span><span>191.790</span><span class="profit">+$21.30</span><button class="close-position">Close</button></div>
+          </div>
+        </div>
+      </div>
+
+      <aside class="order-panel">
+        <div class="panel-title"><h2>Place order</h2><button>⚙</button></div>
+        <div class="buy-sell"><button class="active" data-side="buy">Buy <strong id="buyPrice">1.08435</strong></button><button data-side="sell">Sell <strong id="sellPrice">1.08429</strong></button></div>
+        <div class="order-type"><button class="active">Market</button><button>Limit</button><button>Stop</button></div>
+
+        <label>Trade size</label>
+        <div class="size-input"><input id="size" type="number" value="0.10" min="0.01" step="0.01"><span>Lots</span></div>
+        <div class="size-options"><button data-size="0.01">0.01</button><button data-size="0.10" class="active">0.10</button><button data-size="0.50">0.50</button><button data-size="1.00">1.00</button></div>
+
+        <div class="risk-row"><label><input type="checkbox" id="stopLoss"> Stop loss</label><div class="risk-input"><input value="1.08250" disabled><span>pips</span></div></div>
+        <div class="risk-row"><label><input type="checkbox" id="takeProfit"> Take profit</label><div class="risk-input"><input value="1.08650" disabled><span>pips</span></div></div>
+
+        <div class="order-summary"><div><span>Margin required</span><strong id="margin">$361.44</strong></div><div><span>Account leverage</span><strong>1:30</strong></div></div>
+        <button class="place-order" id="placeOrder"><span>Place buy order</span><b>0.10 lots</b></button>
+        <p class="risk-note"><span>ⓘ</span> Forex trading involves substantial risk.</p>
+      </aside>
+    </section>
+  </main>
+
+  <div class="toast" id="toast"><span>✓</span><div><strong>Order placed</strong><small>EUR/USD Buy · 0.10 lots</small></div></div>
+  <script src="script.js"></script>
+</body>
+</html>

@@ -1,8 +1,8 @@
 # Counter POS
 
-A standalone browser-based point-of-sale demo is available at [`pos.html`](pos.html).
+Open [`login.html`](login.html) for the cashier sign-in/setup screen, then continue to [`pos.html`](pos.html). The browser-only PIN is for demo convenience, not secure authentication. Direct access to `pos.html` is not protected; real staff authentication requires a server-side user/session system.
 
-Features include searchable product categories, a cart with quantity controls, configurable tax, cash change calculation, demo card/other checkout, and printable receipts. Product catalog, currency, and store identity are sample data; cart and order numbering are saved in the current browser. Checkout is simulated and does not process payments.
+The POS supports Kenyan shilling sales, inventory/restocking, cashier and customer details, daily reports, expenses, and refunds. Data is stored locally in the current browser and is not synced or backed up. Payments are recorded for bookkeeping only; no payment is processed.
 
 Run locally with:
 
@@ -10,4 +10,4 @@ Run locally with:
 python3 -m http.server 8080
 ```
 
-Open `http://localhost:8080/pos.html`.
+Open `http://localhost:8080/login.html`.

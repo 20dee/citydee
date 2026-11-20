@@ -1,0 +1,31 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#176b4b">
+  <title>Sign in — Counter POS</title>
+  <style>
+    *{box-sizing:border-box}body{margin:0;min-height:100vh;display:grid;place-items:center;padding:20px;background:radial-gradient(circle at 15% 15%,#dceee2,transparent 35%),#f3f5f2;color:#202720;font-family:Inter,"Segoe UI",Arial,sans-serif}.card{width:min(420px,100%);background:#fff;border:1px solid #e4e9e3;border-radius:16px;padding:30px;box-shadow:0 20px 70px #1e3c2b12}.brand{display:flex;align-items:center;gap:11px;font-size:19px;font-weight:800;margin-bottom:26px}.icon{width:39px;height:39px;border-radius:11px;background:#176b4b;color:#fff;display:grid;place-items:center;font-size:20px}.brand small{display:block;color:#758076;font-size:10px;font-weight:500;margin-top:3px}.eyebrow{font-size:10px;text-transform:uppercase;letter-spacing:.13em;color:#176b4b;font-weight:800}h1{font-size:25px;letter-spacing:-.04em;margin:8px 0}.sub{color:#758076;font-size:12px;line-height:1.55;margin:0 0 22px}.field{margin:14px 0}.field label{display:block;font-size:10px;font-weight:700;color:#5e685f;margin-bottom:6px}.field input{width:100%;height:44px;border:1px solid #e1e6e0;border-radius:7px;padding:0 12px;font-size:13px;outline:none}.field input:focus{border-color:#6b9b80;box-shadow:0 0 0 3px #176b4b12}.btn{width:100%;height:45px;border:0;border-radius:7px;background:#176b4b;color:#fff;font-size:12px;font-weight:800;margin-top:7px}.btn:hover{background:#11583d}.error{display:none;border-radius:6px;background:#fff0f0;color:#a52e2e;padding:9px;font-size:11px;margin:12px 0}.error.show{display:block}.note{font-size:9px;color:#8b938b;line-height:1.55;margin:17px 0 0}.setup{display:none}.setup.show{display:block}.mode{font-size:10px;color:#176b4b;background:#e8f3ec;padding:8px;border-radius:6px;margin-bottom:12px}.logout{color:#758076;font-size:10px;text-align:center;margin-top:14px}.footer{border-top:1px solid #edf0ec;margin-top:22px;padding-top:14px;text-align:center;color:#98a098;font-size:9px}
+  </style>
+</head>
+<body>
+  <main class="card">
+    <div class="brand"><span class="icon">▦</span><span>Counter<small>Kenya point of sale</small></span></div>
+    <div class="eyebrow">Cashier access</div><h1 id="heading">Welcome back</h1><p class="sub" id="description">Sign in to open the shop register.</p>
+    <div class="mode" id="mode"></div>
+    <form id="loginForm">
+      <div class="field"><label for="cashier">CASHIER NAME</label><input id="cashier" autocomplete="username" required maxlength="60" placeholder="Your name"></div>
+      <div class="field"><label for="pin">PIN</label><input id="pin" type="password" inputmode="numeric" autocomplete="current-password" minlength="4" maxlength="12" required placeholder="Enter PIN"></div>
+      <div class="error" id="error" role="alert"></div><button class="btn" id="submit" type="submit">Sign in</button>
+    </form>
+    <p class="note">This browser-only demo stores a cashier name and PIN in this device's local storage. It is not secure authentication; use a server-backed account system for real staff access or sensitive business data.</p>
+    <div class="footer">Counter POS · KSh · Local demo</div>
+  </main>
+<script>
+  const $=s=>document.querySelector(s), form=$('#loginForm'), setupMode=!localStorage.getItem('kenya-pos-login-pin');
+  if(setupMode){$('#heading').textContent='Set up cashier access';$('#description').textContent='Create a local cashier PIN for this browser. You can add or manage secure accounts in a server-backed version.';$('#mode').textContent='First-time setup · Choose a PIN of 4–12 characters';$('#submit').textContent='Save PIN and open register';$('#pin').autocomplete='new-password'}
+  form.addEventListener('submit',e=>{e.preventDefault();const name=$('#cashier').value.trim(),pin=$('#pin').value,error=$('#error');if(!name){return}if(setupMode){if(pin.length<4){error.textContent='PIN must be at least 4 characters.';error.classList.add('show');return}localStorage.setItem('kenya-pos-login-pin',pin)}else if(pin!==localStorage.getItem('kenya-pos-login-pin')){error.textContent='That PIN does not match. Try again.';error.classList.add('show');return}localStorage.setItem('kenya-pos-cashier',name);sessionStorage.setItem('kenya-pos-authenticated','true');sessionStorage.setItem('kenya-pos-session-cashier',name);location.href='pos.html'});
+</script>
+</body>
+</html>

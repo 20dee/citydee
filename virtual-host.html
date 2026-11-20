@@ -1,0 +1,92 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="theme-color" content="#10101a" />
+  <title>VYRA — Virtual Live Host</title>
+  <style>
+    :root{font-family:Inter,ui-sans-serif,system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;color:#f5f4ff;background:#0d0d15;--surface:#171722;--line:#ffffff16;--muted:#a19fb4;--violet:#a88bff;--pink:#fa70c5;--mint:#75edcd}*{box-sizing:border-box}body{margin:0;min-height:100vh;background:radial-gradient(ellipse at 42% 42%,#25203c 0,#11111b 44%,#0d0d15 78%)}button,input,textarea,select{font:inherit}button{cursor:pointer}.app{min-height:100vh;display:grid;grid-template-columns:minmax(0,1fr) 340px;gap:16px;padding:18px;max-width:1600px;margin:auto}.stage{min-height:calc(100vh - 36px);position:relative;overflow:hidden;border:1px solid var(--line);border-radius:20px;background:radial-gradient(ellipse at 50% 48%,#37304f 0,#1b1a2a 40%,#101019 82%);display:flex;align-items:center;justify-content:center}.stage:before,.stage:after{content:"";position:absolute;border:1px solid #bba8ff12;border-radius:50%;width:min(65vw,760px);aspect-ratio:1}.stage:after{width:min(48vw,560px);border-color:#fa70c50c}.stage-top{position:absolute;z-index:3;top:20px;left:22px;right:22px;display:flex;align-items:center;justify-content:space-between}.logo{font-size:13px;font-weight:900;letter-spacing:.18em}.logo b{color:var(--violet)}.live-label{display:flex;align-items:center;gap:7px;padding:8px 11px;border:1px solid var(--line);background:#101019a8;border-radius:99px;color:#d7d4e5;font-size:10px;font-weight:700;letter-spacing:.08em}.live-dot{height:7px;width:7px;border-radius:50%;background:#ff617f;box-shadow:0 0 12px #ff617f}.audience{position:absolute;top:75px;left:23px;z-index:2;color:#eeebff;font-size:11px;background:#11111b88;border:1px solid var(--line);border-radius:7px;padding:8px 10px}.audience span{color:var(--pink);margin-right:5px}.avatar{width:min(57vh,450px);height:min(73vh,570px);position:relative;z-index:1;filter:drop-shadow(0 22px 60px #a88bff1d);animation:float 4s ease-in-out infinite}.avatar svg{width:100%;height:100%;overflow:visible}.avatar .eyes{transform-origin:center;animation:blink 5s infinite}.avatar.talking .mouth{animation:talk .17s infinite alternate}.avatar.talking .jaw{animation:jaw .17s infinite alternate;transform-origin:250px 265px}.avatar.talking .head{animation:headtalk .9s ease-in-out infinite alternate;transform-origin:250px 185px}@keyframes float{50%{transform:translateY(-8px)}}@keyframes blink{0%,44%,48%,100%{transform:scaleY(1)}46%{transform:scaleY(.08)}}@keyframes talk{to{transform:scaleY(.35)}}@keyframes jaw{to{transform:translateY(3px)}}@keyframes headtalk{to{transform:rotate(1deg)}}.speech{position:absolute;z-index:4;bottom:26px;left:50%;transform:translateX(-50%);width:min(74%,570px);min-height:51px;display:flex;align-items:center;justify-content:center;text-align:center;padding:11px 17px;border-radius:13px;border:1px solid #ffffff20;background:#11111bc9;backdrop-filter:blur(12px);font-size:clamp(12px,1.4vw,16px);line-height:1.45;color:#f5f2ff;opacity:0;transition:.2s}.speech.show{opacity:1}.sparkle{position:absolute;color:#ffd782;z-index:2;font-size:20px;animation:twinkle 2s infinite alternate}.s1{top:26%;left:23%}.s2{top:38%;right:19%;animation-delay:.7s}.s3{bottom:25%;left:20%;font-size:13px}@keyframes twinkle{to{opacity:.3;transform:scale(.7) rotate(25deg)}}.panel{min-width:0;background:#15151fe8;border:1px solid var(--line);border-radius:16px;padding:17px;display:flex;flex-direction:column;gap:14px;max-height:calc(100vh - 36px);overflow:auto}.panel-head{display:flex;justify-content:space-between;align-items:center}.panel-head h1{font-size:16px;margin:0}.panel-head span{font-size:10px;color:var(--muted)}.field label{display:block;color:#c6c3d5;font-weight:700;font-size:10px;margin-bottom:6px}.field input,.field textarea,.field select{width:100%;border:1px solid var(--line);border-radius:8px;background:#101019;color:#f5f4ff;padding:10px 11px;outline:none;font-size:12px}.field textarea{min-height:83px;resize:vertical;line-height:1.45}.field input:focus,.field textarea:focus,.field select:focus{border-color:#a88bff80}.row{display:flex;gap:8px}.row .field{flex:1;min-width:0}.primary,.secondary,.send{border:0;border-radius:8px;min-height:39px;padding:0 13px;font-size:11px;font-weight:800}.primary{background:linear-gradient(110deg,#a88bff,#e482dc);color:#181321}.secondary{background:#242432;border:1px solid var(--line);color:#e7e4f2}.send{background:#28233a;color:#c8b7ff;border:1px solid #a88bff30;white-space:nowrap}.actions{display:grid;grid-template-columns:1fr 1fr;gap:8px}.actions .primary{grid-column:1/-1}.toggle{display:flex;align-items:center;gap:8px;color:#c8c5d5;font-size:10px}.toggle input{accent-color:#a88bff}.section-title{font-size:10px;color:#a8a5b8;font-weight:800;letter-spacing:.1em;text-transform:uppercase;margin-bottom:-7px}.chat{flex:1;min-height:95px;max-height:190px;overflow:auto;display:flex;flex-direction:column;gap:7px}.chat-line{font-size:10px;line-height:1.4;color:#dedbea;padding:8px 9px;border-radius:8px;background:#ffffff08}.chat-line b{color:#c3aaff;margin-right:5px}.chat-entry{display:flex;gap:7px}.chat-entry input{min-width:0;flex:1;border:1px solid var(--line);border-radius:7px;background:#101019;color:#fff;padding:9px;font-size:10px}.notice{font-size:9px;color:#8f8ca0;line-height:1.5;margin:0}.toast{position:fixed;bottom:20px;left:50%;transform:translate(-50%,20px);opacity:0;pointer-events:none;padding:10px 14px;border:1px solid var(--line);border-radius:8px;background:#222230;color:#f5f4ff;font-size:11px;transition:.2s;z-index:9}.toast.show{opacity:1;transform:translate(-50%,0)}body.overlay-mode{background:transparent}.overlay-mode .app{display:block;padding:0;min-height:100vh}.overlay-mode .stage{min-height:100vh;border:0;border-radius:0;background:transparent}.overlay-mode .stage:before,.overlay-mode .stage:after,.overlay-mode .stage-top .logo,.overlay-mode .panel{display:none}.overlay-mode .stage-top{top:14px;left:auto;right:14px}.overlay-mode .audience{top:58px;left:auto;right:14px}.overlay-mode .avatar{width:min(72vw,520px);height:min(82vh,660px)}.overlay-mode .speech{bottom:5vh;background:#101019dd}.overlay-mode .sparkle{opacity:.8}@media(max-width:850px){.app{grid-template-columns:1fr;padding:10px;gap:10px}.stage{min-height:66vh}.avatar{height:56vh;width:min(78vw,390px)}.panel{max-height:none}.chat{max-height:130px}}@media(max-width:480px){.stage{min-height:60vh}.avatar{height:48vh}.speech{width:88%;bottom:18px}.stage-top{top:13px;left:13px;right:13px}.audience{top:61px;left:13px}}
+  </style>
+</head>
+<body>
+  <main class="app">
+    <section class="stage" aria-label="Virtual livestream host preview">
+      <div class="stage-top"><div class="logo">VYRA <b>LIVE</b></div><div class="live-label"><i class="live-dot"></i><span id="liveState">READY</span></div></div>
+      <div class="audience"><span>♥</span><strong id="viewerCount">1,248</strong> watching</div>
+      <span class="sparkle s1">✦</span><span class="sparkle s2">✧</span><span class="sparkle s3">✦</span>
+      <div class="avatar" id="avatar" aria-label="Animated virtual humanoid host">
+        <svg viewBox="0 0 500 650" role="img" aria-label="Stylized virtual humanoid avatar">
+          <defs>
+            <linearGradient id="skin" x1="0" y1="0" x2="1" y2="1"><stop stop-color="#f5c5b9"/><stop offset="1" stop-color="#c98991"/></linearGradient>
+            <linearGradient id="hair" x1="0" y1="0" x2="1" y2="1"><stop stop-color="#c7a8ff"/><stop offset=".55" stop-color="#8366d8"/><stop offset="1" stop-color="#523e9c"/></linearGradient>
+            <linearGradient id="jacket" x1="0" y1="0" x2="1" y2="1"><stop stop-color="#b9a3ff"/><stop offset="1" stop-color="#6c58b9"/></linearGradient>
+            <radialGradient id="glow"><stop stop-color="#d9caff" stop-opacity=".4"/><stop offset="1" stop-color="#d9caff" stop-opacity="0"/></radialGradient>
+          </defs>
+          <ellipse cx="250" cy="600" rx="175" ry="45" fill="url(#glow)"/>
+          <!-- shoulders and torso -->
+          <path d="M104 650 Q110 493 178 443 Q205 422 250 420 Q295 422 322 443 Q390 493 396 650Z" fill="url(#jacket)" stroke="#d7caff" stroke-opacity=".35" stroke-width="2"/>
+          <path d="M213 431 L250 488 L287 431 L270 650 L230 650Z" fill="#f1eaff" opacity=".92"/>
+          <path d="M177 463 L220 518 L194 538 L148 480Z M323 463 L280 518 L306 538 L352 480Z" fill="#d3c4ff" opacity=".5"/>
+          <path d="M232 422 L250 454 L268 422" fill="none" stroke="#f3d9d4" stroke-width="18"/>
+          <!-- neck -->
+          <path d="M216 350 L216 439 Q250 468 284 439 L284 350Z" fill="url(#skin)"/>
+          <!-- hair back -->
+          <path d="M145 174 Q145 75 250 72 Q365 72 361 195 L371 379 Q350 420 325 374 L163 399 Q130 375 139 300Z" fill="url(#hair)"/>
+          <!-- ears -->
+          <ellipse cx="151" cy="263" rx="22" ry="34" fill="#d99ea0"/><ellipse cx="349" cy="263" rx="22" ry="34" fill="#d99ea0"/>
+          <!-- face -->
+          <g class="head">
+            <path d="M165 177 Q165 115 250 112 Q335 115 335 177 L329 291 Q323 360 250 390 Q177 360 171 291Z" fill="url(#skin)"/>
+            <!-- fringe -->
+            <path d="M151 220 Q133 108 229 84 Q321 60 357 163 Q333 147 312 143 Q286 139 266 158 Q238 128 206 151 Q181 165 151 220Z" fill="url(#hair)"/>
+            <path d="M155 184 Q171 124 220 107 Q197 146 199 176 Q172 171 155 204Z" fill="#dfd0ff" opacity=".55"/>
+            <!-- brows -->
+            <path d="M188 229 Q208 215 228 228" fill="none" stroke="#604b68" stroke-width="5" stroke-linecap="round"/><path d="M272 228 Q292 215 312 229" fill="none" stroke="#604b68" stroke-width="5" stroke-linecap="round"/>
+            <!-- eyes -->
+            <g class="eyes"><path d="M188 248 Q208 233 229 248 Q209 266 188 248Z" fill="#fff"/><path d="M271 248 Q292 233 312 248 Q291 266 271 248Z" fill="#fff"/><ellipse cx="210" cy="249" rx="6" ry="9" fill="#57458d"/><ellipse cx="292" cy="249" rx="6" ry="9" fill="#57458d"/><circle cx="212" cy="246" r="2.5" fill="white"/><circle cx="294" cy="246" r="2.5" fill="white"/></g>
+            <!-- nose and cheeks -->
+            <path d="M249 251 Q241 280 250 283 Q258 285 262 279" fill="none" stroke="#b87580" stroke-width="3" stroke-linecap="round"/><ellipse cx="192" cy="281" rx="15" ry="7" fill="#f58c9b" opacity=".22"/><ellipse cx="308" cy="281" rx="15" ry="7" fill="#f58c9b" opacity=".22"/>
+            <!-- smile/mouth -->
+            <path d="M229 309 Q250 327 272 308 Q265 339 250 339 Q235 337 229 309Z" fill="#9d425d" class="mouth"/><path d="M235 311 Q250 317 266 310 Q258 320 250 320 Q241 319 235 311Z" fill="#fff2ed" class="jaw"/>
+            <path d="M229 309 Q250 327 272 308" fill="none" stroke="#a95569" stroke-width="3" stroke-linecap="round"/>
+            <!-- earrings -->
+            <circle cx="153" cy="296" r="5" fill="#f5d477"/><circle cx="347" cy="296" r="5" fill="#f5d477"/>
+          </g>
+          <!-- collar accent -->
+          <circle cx="250" cy="477" r="7" fill="#f5d477"/><path d="M250 485 L250 541" stroke="#b59dff" stroke-width="2"/>
+        </svg>
+      </div>
+      <div class="speech" id="speech"></div>
+    </section>
+    <aside class="panel">
+      <div class="panel-head"><h1>Virtual host studio</h1><span>PREVIEW</span></div>
+      <div class="field"><label for="hostName">HOST NAME</label><input id="hostName" value="Vyra" maxlength="24"></div>
+      <div class="row"><div class="field"><label for="voiceSelect">VOICE</label><select id="voiceSelect"><option value="">Default voice</option></select></div><div class="field"><label for="rate">SPEAKING RATE</label><select id="rate"><option value="0.85">Calm</option><option value="1" selected>Natural</option><option value="1.15">Energetic</option></select></div></div>
+      <div class="field"><label for="scriptText">SAY SOMETHING</label><textarea id="scriptText" maxlength="240" placeholder="Type a greeting or response for your virtual host…">Hey everyone! Welcome to the live. Drop a question in the chat and let's talk!</textarea></div>
+      <div class="actions"><button class="primary" id="speakBtn">▶ &nbsp;Speak</button><button class="secondary" id="stopBtn">■ &nbsp;Stop</button><button class="secondary" id="listenBtn">🎙 &nbsp;Use microphone</button></div>
+      <label class="toggle"><input id="captionsToggle" type="checkbox" checked> Show spoken text on stream</label>
+      <div class="section-title">Live chat preview</div>
+      <div class="chat" id="chat"><div class="chat-line"><b>mika_88</b>First time here! ✨</div><div class="chat-line"><b>theo.draws</b>Love your avatar!</div><div class="chat-line"><b>cozyvibes</b>What are we chatting about today?</div></div>
+      <form class="chat-entry" id="chatForm"><input id="chatInput" maxlength="100" placeholder="Add a chat message…" aria-label="Chat message"><button class="send">Send</button></form>
+      <p class="notice">This is a local avatar and chat demo. It does not connect to TikTok, ingest live comments, or publish a stream. Use a broadcasting app's browser-source feature to add the overlay to your scene.</p>
+      <button class="secondary" id="overlayBtn">Open clean stream overlay ↗</button>
+    </aside>
+  </main>
+  <div class="toast" id="toast" role="status"></div>
+  <script>
+    const $=s=>document.querySelector(s),avatar=$('#avatar'),speech=$('#speech'),synth=window.speechSynthesis;let voices=[],recognition=null,timer;
+    function loadVoices(){voices=synth?.getVoices()||[];const select=$('#voiceSelect');select.innerHTML='<option value="">Default voice</option>'+voices.map((v,i)=>`<option value="${i}">${v.name} · ${v.lang}</option>`).join('')}
+    if(synth){loadVoices();synth.onvoiceschanged=loadVoices}
+    function speak(text){if(!text.trim()){notify('Add some text for Vyra to say.');return}if(!synth){notify('Speech synthesis is not available in this browser.');return}synth.cancel();$('#liveState').textContent='LIVE';const utterance=new SpeechSynthesisUtterance(text);const chosen=voices[Number($('#voiceSelect').value)];if(chosen)utterance.voice=chosen;utterance.rate=Number($('#rate').value);utterance.pitch=1.08;utterance.onstart=()=>{avatar.classList.add('talking');if($('#captionsToggle').checked){speech.textContent=text;speech.classList.add('show')}};utterance.onend=()=>{avatar.classList.remove('talking');$('#liveState').textContent='READY';setTimeout(()=>speech.classList.remove('show'),2800)};utterance.onerror=()=>{avatar.classList.remove('talking');$('#liveState').textContent='READY'};synth.speak(utterance)}
+    $('#speakBtn').onclick=()=>speak($('#scriptText').value);$('#stopBtn').onclick=()=>{synth?.cancel();avatar.classList.remove('talking');speech.classList.remove('show');$('#liveState').textContent='READY'};
+    function notify(text){const t=$('#toast');t.textContent=text;t.classList.add('show');clearTimeout(timer);timer=setTimeout(()=>t.classList.remove('show'),2400)}
+    const names=['luna_live','pixelpanda','mika_88','heyitskai','cozyvibes','starrynight'];$('#chatForm').addEventListener('submit',e=>{e.preventDefault();const input=$('#chatInput');const text=input.value.trim();if(!text)return;addChat('you',text);input.value='';if(Math.random()>.3)setTimeout(()=>addChat(names[Math.floor(Math.random()*names.length)],['✨','Hey! 👋','Love that!','Thanks for being here 💜'][Math.floor(Math.random()*4)]),1200)})
+    function addChat(name,text){const line=document.createElement('div');line.className='chat-line';const b=document.createElement('b');b.textContent=name;line.append(b,document.createTextNode(text));$('#chat').append(line);$('#chat').scrollTop=$('#chat').scrollHeight;while($('#chat').children.length>24)$('#chat').firstElementChild.remove()}
+    $('#hostName').addEventListener('input',e=>{$('.logo').innerHTML=`${e.target.value||'HOST'} <b>LIVE</b>`});
+    $('#overlayBtn').onclick=()=>{const url=new URL(location.href);url.searchParams.set('overlay','1');window.open(url.href,'_blank','noopener')};
+    const params=new URLSearchParams(location.search);if(params.get('overlay')==='1'){document.body.classList.add('overlay-mode');const stage=$('.stage');stage.addEventListener('click',()=>{if(speech.textContent)speak(speech.textContent)});}
+    if('SpeechRecognition'in window||'webkitSpeechRecognition'in window){const Speech=window.SpeechRecognition||window.webkitSpeechRecognition;recognition=new Speech();recognition.lang=navigator.language||'en-US';recognition.interimResults=false;recognition.onresult=e=>{const words=e.results[0][0].transcript;$('#scriptText').value=words;speak(words)};recognition.onerror=()=>notify('Microphone recognition stopped or unavailable.');$('#listenBtn').onclick=()=>{try{recognition.start();notify('Listening…')}catch{notify('Microphone is already listening.')}}}else $('#listenBtn').onclick=()=>notify('Speech recognition is not supported in this browser.');
+  </script>
+</body>
+</html>

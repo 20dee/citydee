@@ -1,0 +1,45 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" />
+  <title>Neon Apex — Racing</title>
+  <style>
+    :root{font-family:Inter,system-ui,sans-serif;color:#fff;background:#080b12}*{box-sizing:border-box}body{margin:0;height:100vh;overflow:hidden}canvas{display:block;width:100vw;height:100vh;background:#171b24}.hud{position:fixed;inset:18px 22px auto;display:flex;justify-content:space-between;align-items:flex-start;pointer-events:none}.brand{font-weight:900;letter-spacing:.14em;font-size:14px;text-shadow:0 2px 12px #000}.brand b{color:#ffcf32}.stats{display:flex;gap:8px}.stat{min-width:82px;padding:8px 11px;border:1px solid #ffffff22;border-radius:8px;background:#090c13aa;backdrop-filter:blur(8px);text-align:right}.stat small{display:block;color:#9da7b7;font-size:9px;text-transform:uppercase;letter-spacing:.12em}.stat strong{font-size:20px;font-variant-numeric:tabular-nums}.start,.gameover{position:fixed;inset:0;display:grid;place-items:center;background:#080b12bb;backdrop-filter:blur(8px);transition:.25s}.panel{text-align:center}.panel h1{font-size:clamp(42px,9vw,96px);line-height:.85;margin:0 0 24px;letter-spacing:-.07em;text-transform:uppercase}.panel h1 span{display:block;color:#ffcf32}.panel p{color:#adb5c3;margin:0 0 22px}.panel button{border:0;border-radius:7px;padding:14px 24px;background:#ffcf32;color:#17110a;font-weight:900;text-transform:uppercase;letter-spacing:.08em;cursor:pointer}.hidden{opacity:0;pointer-events:none}.controls{position:fixed;left:18px;right:18px;bottom:18px;display:none;justify-content:space-between;pointer-events:none}.control-group{display:flex;gap:8px}.control{width:64px;height:64px;border:1px solid #ffffff33;border-radius:50%;background:#111622aa;color:white;font-size:22px;pointer-events:auto;touch-action:none}.control.accel{border-radius:18px;background:#ffcf32cc;color:#15120a}.controls button:active{transform:scale(.94)}@media(max-width:760px),(pointer:coarse){.controls{display:flex}.hud{inset:12px}.stat{min-width:68px}.brand{display:none}}
+  </style>
+</head>
+<body>
+  <canvas id="game"></canvas>
+  <div class="hud">
+    <div class="brand">NEON <b>APEX</b></div>
+    <div class="stats">
+      <div class="stat"><small>Lap</small><strong id="lap">1/3</strong></div>
+      <div class="stat"><small>Speed</small><strong><span id="speed">0</span></strong></div>
+      <div class="stat"><small>Time</small><strong id="time">0.00</strong></div>
+    </div>
+  </div>
+  <section class="start" id="start">
+    <div class="panel"><h1>Neon <span>Apex</span></h1><p>Arrow keys or WASD · 3 laps · Avoid the cars</p><button id="startBtn">Start race</button></div>
+  </section>
+  <section class="gameover hidden" id="gameover">
+    <div class="panel"><h1 id="resultTitle">Race <span>Finished</span></h1><p id="resultText"></p><button id="restartBtn">Race again</button></div>
+  </section>
+  <div class="controls">
+    <div class="control-group"><button class="control" data-key="left">←</button><button class="control" data-key="right">→</button></div>
+    <button class="control accel" data-key="up">▲</button>
+  </div>
+  <script>
+    const canvas=document.getElementById('game'),ctx=canvas.getContext('2d');
+    let w,h,dpr,roadWidth,roadCenter,running=false,last=0,startTime=0,lap=1,lapProgress=0,speed=0;
+    const keys={};const player={x:0,y:0,w:38,h:74};let rivals=[],particles=[];
+    function resize(){dpr=Math.min(devicePixelRatio||1,2);w=innerWidth;h=innerHeight;canvas.width=w*dpr;canvas.height=h*dpr;canvas.style.width=w+'px';canvas.style.height=h+'px';ctx.setTransform(dpr,0,0,dpr,0,0);roadWidth=Math.min(w*.72,620);roadCenter=w/2;player.y=h*.78;}
+    function reset(){lap=1;lapProgress=0;speed=0;player.x=roadCenter-roadWidth*.15;rivals=[];particles=[];for(let i=0;i<6;i++)rivals.push(makeRival(i));startTime=performance.now();running=true;document.getElementById('start').classList.add('hidden');document.getElementById('gameover').classList.add('hidden');last=performance.now();requestAnimationFrame(loop)}
+    function makeRival(i){const lane=[-.48,-.24,.24,.48][i%4];return{x:roadCenter+roadWidth*lane,y:-120-i*210,w:40,h:74,color:['#ef4e74','#4f91ff','#b95cff','#52d68a'][i%4],speed:170+i*18,offset:lane}}
+    function car(x,y,carW,carH,color,playerCar=false){ctx.save();ctx.translate(x,y);ctx.shadowColor=playerCar?'#ffcf32':color;ctx.shadowBlur=playerCar?18:8;ctx.fillStyle='#111722';ctx.fillRect(-carW*.58,-carH*.46,carW*.16,carH*.28);ctx.fillRect(carW*.42,-carH*.46,carW*.16,carH*.28);ctx.fillStyle=color;ctx.beginPath();ctx.roundRect(-carW/2,-carH/2,carW,carH,8);ctx.fill();ctx.shadowBlur=0;ctx.fillStyle='#111722';ctx.fillRect(-carW*.38,-carH*.32,carW*.76,carH*.38);ctx.fillStyle=playerCar?'#fff4b0':'#f7e7a8';ctx.fillRect(-carW*.36,-carH*.47,carW*.22,5);ctx.fillRect(carW*.14,-carH*.47,carW*.22,5);ctx.fillStyle='#ff4058';ctx.fillRect(-carW*.34,carH*.42,carW*.18,5);ctx.fillRect(carW*.16,carH*.42,carW*.18,5);ctx.restore()}
+    function loop(now){if(!running)return;const dt=Math.min((now-last)/1000,.035);last=now;const accelerating=keys.up||keys.w||keys.touchUp;speed+=(accelerating?210:-75)*dt;speed=Math.max(0,Math.min(310,speed));const steer=(keys.right||keys.d?1:0)-(keys.left||keys.a?1:0);player.x+=steer*(220+speed*.55)*dt;if(player.x<roadCenter-roadWidth*.42)player.x=roadCenter-roadWidth*.42;if(player.x>roadCenter+roadWidth*.42)player.x=roadCenter+roadWidth*.42;lapProgress+=speed*dt/1000;if(lapProgress>=115){lap++;lapProgress=0;if(lap>3){finish(true);return}}rivals.forEach((r,i)=>{r.y+=((r.speed+speed*.25)*dt);r.x=roadCenter+roadWidth*r.offset+Math.sin(now*.0015+i)*roadWidth*.025;if(r.y>h+100){r.y=-180-Math.random()*500;r.offset=[-.48,-.24,.24,.48][Math.floor(Math.random()*4)]}if(Math.abs(player.x-r.x)<(player.w+r.w)*.48&&Math.abs(player.y-r.y)<(player.h+r.h)*.48){for(let p=0;p<20;p++)particles.push({x:player.x,y:player.y,vx:(Math.random-.5)*180,vy:(Math.random-.5)*180,a:1});finish(false)}});draw(now,dt);requestAnimationFrame(loop)}
+    function draw(now){ctx.clearRect(0,0,w,h);ctx.fillStyle='#30383a';ctx.fillRect(0,0,w,h);ctx.fillStyle='#171d23';ctx.fillRect(roadCenter-roadWidth/2,0,roadWidth,h);ctx.fillStyle='#d8e0dc';ctx.fillRect(roadCenter-roadWidth/2,0,5,h);ctx.fillRect(roadCenter+roadWidth/2-5,0,5,h);const scroll=(now*.18)%90;ctx.fillStyle='#8e979a';for(let i=-1;i<12;i++){const y=(i*90+scroll)% (h+90)-90;ctx.fillRect(roadCenter-roadWidth*.1,y,roadWidth*.012,42);ctx.fillRect(roadCenter+roadWidth*.088,y,roadWidth*.012,42)}for(let i=-1;i<12;i++){const y=(i*150+scroll*1.6)%(h+150)-150;ctx.fillStyle='#ffcf32';ctx.fillRect(roadCenter-roadWidth*.34,y,roadWidth*.018,70);ctx.fillRect(roadCenter+roadWidth*.322,y,roadWidth*.018,70)}rivals.forEach(r=>car(r.x,r.y,r.w,r.h,r.color));particles.forEach(p=>{p.x+=p.vx*.016;p.y+=p.vy*.016;p.a-=.025;ctx.fillStyle=`rgba(255,207,50,${p.a})`;ctx.fillRect(p.x,p.y,4,4)});particles=particles.filter(p=>p.a>0);car(player.x,player.y,player.w,player.h,'#ffcf32',true);document.getElementById('speed').textContent=Math.round(speed*.72);document.getElementById('lap').textContent=lap+'/3';document.getElementById('time').textContent=((performance.now()-startTime)/1000).toFixed(2)}
+    function finish(won){running=false;document.getElementById('resultTitle').innerHTML=won?'Race <span>Finished</span>':'Race <span>Ended</span>';document.getElementById('resultText').textContent=won?'You completed 3 laps in '+document.getElementById('time').textContent+' seconds.':'You collided. Try a smoother racing line.';document.getElementById('gameover').classList.remove('hidden')}
+    addEventListener('resize',resize);const map={ArrowLeft:'left',a:'left',A:'left',ArrowRight:'right',d:'right',D:'right',ArrowUp:'up',w:'up',W:'up'};addEventListener('keydown',e=>{if(map[e.key])keys[map[e.key]]=true;if(['ArrowLeft','ArrowRight','ArrowUp'].includes(e.key))e.preventEventDefault?.()});addEventListener('keyup',e=>{if(map[e.key])keys[map[e.key]]=false});document.querySelectorAll('[data-key]').forEach(btn=>{const k=btn.dataset.key;const set=v=>{keys['touch'+k[0].toUpperCase()+k.slice(1)]=v};btn.addEventListener('pointerdown',e=>{e.preventDefault();set(true);btn.setPointerCapture(e.pointerId)});btn.addEventListener('pointerup',()=>set(false));btn.addEventListener('pointercancel',()=>set(false))});document.getElementById('startBtn').addEventListener('click',reset);document.getElementById('restartBtn').addEventListener('click',reset);resize();draw(performance.now());
+  </script>
+</body>
+</html>
